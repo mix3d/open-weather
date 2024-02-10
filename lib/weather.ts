@@ -11,57 +11,14 @@ export const validateZip = (zipcode: string) => {
   return zipcodeRegex.test(zipcode);
 };
 
-// Unused, as the base API still supports sending the zip directly
-const getCoordByZip = async (zipcode: string) =>
-  (await (
-    await fetch(
-      `https://api.openweathermap.org/geo/1.0/zip?zip=${zipcode}&appid=${OPENWEATHER_API_KEY}`
-    )
-  ).json()) as Coord;
-// Unused, as the base API still supports sending the zip directly
-const getCachedCoordByZip = unstable_cache(
-  async (zipcode: string) => await getCoordByZip(zipcode),
-  ["zipcodes"],
-  { revalidate: 60 * 60 * 24 } // save zip to coordinates for 24 hours
-);
-// Unused, as the base API still supports sending the zip directly
-const getWeatherFromCoords = async (geoData: Coord) =>
-  (await (
-    await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?lat=${geoData.lat}&lon=${geoData.lon}&appid=${OPENWEATHER_API_KEY}`
-    )
-  ).json()) as WeatherForecast;
-
 export const getWeatherFromZip = async (zipcode: string) =>
   (
     await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?zip=${zipcode}&appid=${OPENWEATHER_API_KEY}&units=imperial`
+      // We don't even need to manually set revalidation here, becuase it's largely handled on the page/route that calls this function instead
       // { next: { revalidate: 60 * 30 } }
     )
   ).json() as Promise<WeatherForecast>;
-
-export const getCachedWeatherFromZip = unstable_cache(
-  async (zipcode: string) => {
-    // No longer necessary because you can still pass zip to the forecast API as a query param instead
-    // despite warnings on the API docs to not do this
-    // const coord = await getCachedCoordByZip(zipcode);
-    // const weather = await getWeatherFromCoords(coord);
-
-    const weather = await getWeatherFromZip(zipcode);
-
-    return weather;
-  },
-  ["weather-by-zip"],
-  { revalidate: 60 * 30 } // cache values every 30 minutes
-);
-
-export type Coord = {
-  zip: string;
-  name: string;
-  lat: number;
-  lon: number;
-  country: string;
-};
 
 // NOTE: Generated with ChatGPT
 // prompt: "Can you create a typescript type that captures the API response of the openweatherAPI's 5day forecast listed here https://openweathermap.org/forecast5"
