@@ -16,7 +16,7 @@ export function Home() {
         <div className="flex flex-col gap-2 min-[400px]:flex-row">
           <div className="flex flex-col gap-1 min-[400px]:flex-row]">
             <Input className="max-w-xs" placeholder="Enter your ZIP code" />
-            <Button className="w-full max-w-xs" size="md">
+            <Button className="w-full max-w-xs">
               Get Weather
             </Button>
           </div>
