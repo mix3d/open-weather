@@ -22,12 +22,7 @@ export default async function Page({ params }: { params: { zipcode: string } }) 
   }
 
   return (
-    <>
-      <div className="text-center">
-        <span>last rendered: {Date.now()}</span>
-      </div>
-      <Weather forecast={weather} zipcode={params.zipcode}></Weather>
-    </>
+    <Weather forecast={weather} zipcode={params.zipcode}></Weather>
   )
 }
 export async function generateMetadata(
