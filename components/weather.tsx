@@ -16,33 +16,30 @@ export function Weather(props: { forecast: WeatherForecast, zipcode: string }) {
         <h1 className="text-3xl font-bold tracking-tight">5-Day Forecast for {props.forecast.city.name} ({props.zipcode})</h1>
       </div>
       <div className="container grid gap-6 px-4 mx-auto md:grid-cols-2 lg:px-6 xl:grid-cols-3">
-        {Object.entries(groupedForecast!).map(([key, dayList], index) =>
-          <DayCard key={key} hourly={dayList} index={index} ></DayCard>
+        {Object.entries(groupedForecast!).map(([key, hourly], index) => {
+          const title = index == 0 ? "Today" : index == 1 ? "Tomorrow" : hourly[0].dayOfWeek
+          return (
+            <div className="grid gap-4" key={key}>
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>{title}</CardTitle>
+                    <h4 className="text-lg font-medium leading-none tracking-tight">{hourly[0].dt_txt.split(' ')[0]}</h4>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4">
+                    {hourly.map(item => (
+                      <WeatherRow key={item.dt} value={item}></WeatherRow>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )
+        }
         )}
       </div>
-    </div>
-  )
-}
-
-const DayCard = ({ hourly, index }: { hourly: WeatherListItem[], index: number }) => {
-  const title = index == 0 ? "Today" : index == 1 ? "Tomorrow" : hourly[0].dayOfWeek
-  return (
-    <div className="grid gap-4">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>{title}</CardTitle>
-            <h4 className="text-lg font-medium leading-none tracking-tight">{hourly[0].dt_txt.split(' ')[0]}</h4>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
-            {hourly.map(item => (
-              <WeatherRow key={item.dt} value={item}></WeatherRow>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }
@@ -64,7 +61,6 @@ const WeatherRow = ({ value }: { value: WeatherListItem }) => {
           width={50}
           height={50}
         />
-
       </div>
     </div>
   )

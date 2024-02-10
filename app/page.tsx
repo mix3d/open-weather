@@ -13,16 +13,18 @@ export default function Home() {
   const RandIcon = icons[Math.floor(Math.random() * icons.length)]
 
   return (
-    <div className="container flex flex-col items-center justify-center gap-4 px-4 py-12 mx-auto text-center md:py-24">
-      <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl lg:text-7xl">Weather Forecast</h1>
-      <p className="max-w-[600px] text-gray-800 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-        Enter your ZIP code to get the latest weather forecast for your area.
-      </p>
-      {/* Because I couldn't figure out server component form routing, 
-          here's a client component getting passed a server-rendered random icon */}
-      <ClientForm>
-        <RandIcon></RandIcon><span>Get Weather</span>
-      </ClientForm>
+    <div className="grid w-full h-full place-items-center">
+      <div className="container flex flex-col items-center justify-center gap-4 px-4 py-12 mx-auto text-center md:py-24">
+        <h1 className="text-5xl font-bold tracking-tighter sm:text-6xl lg:text-7xl">Weather Forecast</h1>
+        <p className="max-w-[600px] text-gray-800 md:text-base/relaxed lg:text-base/relaxed xl:text-lg/relaxed dark:text-gray-400">
+          Enter your ZIP code to get the latest 5-day forecast for your area.
+        </p>
+        {/* Because I couldn't figure out server component form routing, 
+            here's a client component getting passed a server-rendered random icon */}
+        <ClientForm>
+          <RandIcon></RandIcon><span>Get Weather</span>
+        </ClientForm>
+      </div>
     </div>
   )
 }

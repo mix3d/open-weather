@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default async function Page({ params }: { params: { zipcode: string } }) {
   // TODO: validate zipcode before fetching
-  // TODO: Better support for more international locales?B
+  // TODO: Better support for more international locales?
   const weather = await getWeatherFromZip(params.zipcode)
   if (!weather?.cnt) {
     return (
