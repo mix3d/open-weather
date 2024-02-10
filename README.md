@@ -12,7 +12,9 @@ It is hosted on Vercel at [weather.mjkd.dev](https://weather.mjkd.dev)
 
 ## Getting Started
 
-First, run the development server:
+First, create a `.env.local` file and enter `OPENWEATHER_API_KEY=<yourkeyvalue>`. If deploying to Vercel, add this environment variable to the deploy config.
+
+Then, run the development server:
 
 ```bash
 npm run dev
