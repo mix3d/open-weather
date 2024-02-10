@@ -72,10 +72,9 @@ const WeatherRow = ({ value }: { value: WeatherListItem }) => {
 
 type WeatherListItem = WeatherForecast['list'][0] & { dayOfWeek: string }
 const groupForecastByDay = (weather: WeatherForecast) => {
-  if (!weather) return null;
-  const groupedForecast: { [key: string]: WeatherListItem[] } = {};
+  if (!weather) return {};
 
-  weather.list.forEach(item => {
+  return weather.list.reduce<{ [key: string]: WeatherListItem[] }>((groupedForecast, item) => {
     const date = item.dt_txt.split(" ")[0];
     const dayOfWeek = getDayOfWeek(new Date(date).getDay());
 
@@ -84,9 +83,9 @@ const groupForecastByDay = (weather: WeatherForecast) => {
     }
 
     groupedForecast[date].push({ ...item, dayOfWeek });
-  });
+    return groupedForecast
+  }, {});
 
-  return groupedForecast;
 };
 
 const getDayOfWeek = (dayIndex: number): string => {
