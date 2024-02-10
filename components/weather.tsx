@@ -6,7 +6,6 @@
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { WeatherForecast } from "@/lib/weather"
 
-// TODO: Group and display values by localized-to-the-zipcode times, not UTC time
 export function Weather(props: { forecast: WeatherForecast, zipcode: string }) {
 
   const groupedForecast = groupForecastByDay(props.forecast)
@@ -25,7 +24,10 @@ export function Weather(props: { forecast: WeatherForecast, zipcode: string }) {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle>{title}</CardTitle>
-                    <h4 className="text-lg font-medium leading-none tracking-tight">{hourly[0].dt_txt.split(' ')[0]}</h4>
+                    <h4 className="text-lg font-medium leading-none tracking-tight">
+                      {index <= 1 ? `${hourly[0].dayOfWeek.substring(0, 3)} ` : ''}
+                      {hourly[0].dt_txt}
+                    </h4>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -50,7 +52,7 @@ const WeatherRow = ({ value }: { value: WeatherListItem }) => {
     <div className="grid items-center grid-cols-3">
       {/* Not the most elegant way to get the time but it's fine */}
       <div className="flex flex-col">
-        <p className="text-lg font-medium">{value.dt_txt.split(' ')[1].split(":").slice(0, 2).join(":")}<span className="text-xs text-gray-400">UTC</span></p>
+        <p className="text-lg font-medium">{value.hourString}</p>
         <p className="text-sm font-light text-gray-400 capitalize">{value.weather[0].description}</p>
       </div>
       <p className="text-2xl font-bold text-center">{Math.round(value.main.temp)}°F</p>
@@ -66,23 +68,57 @@ const WeatherRow = ({ value }: { value: WeatherListItem }) => {
   )
 }
 
-type WeatherListItem = WeatherForecast['list'][0] & { dayOfWeek: string }
+type WeatherListItem = WeatherForecast['list'][0] & { dayOfWeek: string, hourString: string }
 const groupForecastByDay = (weather: WeatherForecast) => {
   if (!weather) return {};
 
-  return weather.list.reduce<{ [key: string]: WeatherListItem[] }>((groupedForecast, item) => {
-    const date = item.dt_txt.split(" ")[0];
-    const dayOfWeek = getDayOfWeek(new Date(date).getDay());
+  const offset = weather.city.timezone
 
-    if (!groupedForecast[date]) {
-      groupedForecast[date] = [];
+  return weather.list.reduce<{ [key: string]: WeatherListItem[] }>((groupedForecast, item) => {
+    // adjust the UTC unix date to the city's local time, stored as # of seconds offset
+    const dateObj = new Date((item.dt + offset) * 1000)
+
+    // use the UTC date since we already adjusted for local time above
+    const year = dateObj.getUTCFullYear();
+    const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0'); // Month is zero-based
+    const day = String(dateObj.getUTCDate()).padStart(2, '0');
+    const dayOfWeek = getDayOfWeek(dateObj.getUTCDay());
+
+    const intlDate = `${year}-${month}-${day}`;
+
+    const hourString = getHourString(dateObj)
+
+    // overwrite the API's formatted with the preferred display 
+    item.dt_txt = `${month}/${day}`
+
+    if (!groupedForecast[intlDate]) {
+      groupedForecast[intlDate] = [];
     }
 
-    groupedForecast[date].push({ ...item, dayOfWeek });
+    groupedForecast[intlDate].push({ ...item, dayOfWeek, hourString });
+
     return groupedForecast
   }, {});
 
 };
+
+// Generated with ChatGPT
+// Prompt: "I have a JS Date object, how can I output in `HH:MM am/pm` format?" 
+const getHourString = (dateObj: Date) => {
+  const hours = dateObj.getUTCHours();
+  const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
+
+  let amOrPm = 'am';
+  let formattedHours = hours;
+  if (hours > 12) {
+    formattedHours = hours - 12;
+    amOrPm = 'pm';
+  } else if (hours === 0) {
+    formattedHours = 12;
+  }
+
+  return `${formattedHours}:${minutes} ${amOrPm}`;
+}
 
 const getDayOfWeek = (dayIndex: number): string => {
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
