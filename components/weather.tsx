@@ -6,6 +6,7 @@
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { WeatherForecast } from "@/lib/weather"
 
+// TODO: Group and display values by localized-to-the-zipcode times, not UTC time
 export function Weather(props: { forecast: WeatherForecast, zipcode: string }) {
 
   const groupedForecast = groupForecastByDay(props.forecast)
