@@ -14,11 +14,6 @@ export function Weather(props: { forecast: WeatherForecast, zipcode: string }) {
     <div className="py-12 lg:py-24">
       <div className="container px-4 py-6 mx-auto lg:py-12 lg:px-6 ">
         <h1 className="text-3xl font-bold tracking-tight">5-Day Forecast for {props.forecast.city.name} ({props.zipcode})</h1>
-        {/* <p className="text-gray-500 dark:text-gray-400">Enter a ZIP code to get the 5-day forecast.</p>
-        <div className="flex w-full max-w-sm gap-4">
-          <Input placeholder="Enter ZIP code" />
-          <Button>Submit</Button>
-        </div> */}
       </div>
       <div className="container grid gap-6 px-4 mx-auto md:grid-cols-2 lg:px-6 xl:grid-cols-3">
         {Object.entries(groupedForecast!).map(([key, dayList], index) =>
