@@ -4,8 +4,7 @@ import { getWeatherFromZip } from "@/lib/weather";
 import { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamic = "error"
-export const revalidate = 120
+export const revalidate = 60 * 30
 
 export default async function Page({ params }: { params: { zipcode: string } }) {
   // TODO: validate zipcode before fetching

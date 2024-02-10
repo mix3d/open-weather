@@ -7,6 +7,8 @@ import { ClientForm } from "@/components/client-form"
 
 const icons = [SunIcon, CloudSunIcon, CloudIcon, CloudRainIcon, CloudSnowIcon, MoonIcon, UmbrellaIcon]
 
+// Intentionally low revalidate to get the random icon to show more often
+export const revalidate = 10
 export default function Home() {
 
   // Randomize the icon because that's fun
