@@ -31,16 +31,16 @@ export async function generateMetadata(
   // fetch data
   const weather = await getWeatherFromZip(zipcode)
 
-  let images = []
-
-  if (weather.list?.[0]?.weather?.[0]?.icon)
-    images.push(`https://openweathermap.org/img/wn/${weather.list?.[0]?.weather?.[0]?.icon}@2x.png`)
+  if (!weather?.cnt)
+    return {
+      title: `Could not find Forecast for '${params.zipcode}'`
+    }
 
   return {
     title: `5-day forecast for ${weather?.city?.name ?? zipcode}`,
 
     openGraph: {
-      images: images,
+      images: [`https://openweathermap.org/img/wn/${weather.list?.[0]?.weather?.[0]?.icon}@2x.png`],
     },
   }
 }
