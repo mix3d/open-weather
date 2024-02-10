@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Weather } from "@/components/weather";
 import { getWeatherFromZip } from "@/lib/weather";
+import { Metadata } from "next";
 import Link from "next/link";
 
 export default async function Page({ params }: { params: { zipcode: string } }) {
@@ -20,4 +21,26 @@ export default async function Page({ params }: { params: { zipcode: string } }) 
   return (
     <Weather forecast={weather} zipcode={params.zipcode}></Weather>
   )
+}
+export async function generateMetadata(
+  { params }: { params: { zipcode: string } },
+): Promise<Metadata> {
+  // read route params
+  const zipcode = params.zipcode
+
+  // fetch data
+  const weather = await getWeatherFromZip(zipcode)
+
+  let images = []
+
+  if (weather.list?.[0]?.weather?.[0]?.icon)
+    images.push(`https://openweathermap.org/img/wn/${weather.list?.[0]?.weather?.[0]?.icon}@2x.png`)
+
+  return {
+    title: `5-day forecast for ${weather?.city?.name ?? zipcode}`,
+
+    openGraph: {
+      images: images,
+    },
+  }
 }
