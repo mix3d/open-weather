@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: { zipcode: string } }) 
     return (
       <div className="py-12 lg:py-24">
         <div className="container flex flex-col items-center px-4 py-6 mx-auto space-y-8 lg:py-12 lg:px-6">
-          <h1 className="text-3xl font-bold tracking-tight text-center">Could not find Forecast for {params.zipcode}</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-center">Could not find Forecast for &apos;{params.zipcode}&apos;</h1>
           <Button asChild ><Link href="/">Go Back</Link></Button>
         </div>
       </div>)
