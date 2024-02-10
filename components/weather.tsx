@@ -46,13 +46,12 @@ export function Weather(props: { forecast: WeatherForecast, zipcode: string }) {
 }
 
 const WeatherRow = ({ value }: { value: WeatherListItem }) => {
-  console.log("weather row", value)
   return (
     <div className="grid items-center grid-cols-3">
       {/* Not the most elegant way to get the time but it's fine */}
       <div className="flex flex-col">
-        <p className="font-medium">{value.dt_txt.split(' ')[1].split(":").slice(0, 2).join(":")}</p>
-        <p className="text-sm font-light text-gray-400">{value.weather[0].description}</p>
+        <p className="text-lg font-medium">{value.dt_txt.split(' ')[1].split(":").slice(0, 2).join(":")}<span className="text-xs text-gray-400">UTC</span></p>
+        <p className="text-sm font-light text-gray-400 capitalize">{value.weather[0].description}</p>
       </div>
       <p className="text-2xl font-bold text-center">{Math.round(value.main.temp)}°F</p>
       <div className="flex flex-col items-end justify-end">
