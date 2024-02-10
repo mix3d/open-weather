@@ -63,7 +63,6 @@ const WeatherRow = ({ value }: { value: WeatherListItem }) => {
           alt={value.weather[0].main}
           width={50}
           height={50}
-        // className="dark:invert"
         />
 
       </div>
