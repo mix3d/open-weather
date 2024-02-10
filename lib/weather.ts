@@ -35,8 +35,8 @@ const getWeatherFromCoords = async (geoData: Coord) =>
 export const getWeatherFromZip = async (zipcode: string) =>
   (
     await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?zip=${zipcode}&appid=${OPENWEATHER_API_KEY}&units=imperial`,
-      { next: { revalidate: 60 * 30 } }
+      `https://api.openweathermap.org/data/2.5/forecast?zip=${zipcode}&appid=${OPENWEATHER_API_KEY}&units=imperial`
+      // { next: { revalidate: 60 * 30 } }
     )
   ).json() as Promise<WeatherForecast>;
 
