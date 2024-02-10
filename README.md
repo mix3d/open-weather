@@ -7,7 +7,6 @@ It is hosted on Vercel at [weather.mjkd.dev](https://weather.mjkd.dev)
 ## Known issues
 
 - Assumes US zipcodes. Doesn't Validate before navigating or fetching.
-- Time is in UTC, does not account for the timezone of the zipcode itself
 - Would be good to learn how to do server-side form submission to route with server components instead of the client-component hack I did.
 
 ## Getting Started
